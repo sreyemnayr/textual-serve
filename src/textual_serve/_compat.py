@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+__all__ = ["cached_property"]
+
 import sys
 from typing import Any, Callable, Generic, Self, TypeVar, overload
 
