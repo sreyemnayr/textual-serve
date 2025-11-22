@@ -217,7 +217,14 @@ class Server:
         except NotImplementedError:
             pass
         # Keep the server running indefinitely
-        await asyncio.Event().wait()
+        try:
+            await asyncio.Event().wait()
+        except GracefulExit:
+            # Gracefully handle exit signal
+            pass
+        finally:
+            # Cleanup
+            await runner.cleanup()
 
     def serve(self, debug: bool = False) -> None:
         """Serve the Textual application.
