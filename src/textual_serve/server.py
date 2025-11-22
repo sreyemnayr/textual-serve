@@ -208,20 +208,21 @@ class Server:
         app = await self._make_app()
         runner = web.AppRunner(app, handle_signals=False)
         await runner.setup()
-        site = web.TCPSite(runner, self.host, self.port)
-        await site.start()
         try:
-            loop = asyncio.get_running_loop()
-            loop.add_signal_handler(signal.SIGINT, self.request_exit)
-            loop.add_signal_handler(signal.SIGTERM, self.request_exit)
-        except NotImplementedError:
-            pass
-        # Keep the server running indefinitely
-        try:
-            await asyncio.Event().wait()
-        except GracefulExit:
-            # Gracefully handle exit signal
-            pass
+            site = web.TCPSite(runner, self.host, self.port)
+            await site.start()
+            try:
+                loop = asyncio.get_running_loop()
+                loop.add_signal_handler(signal.SIGINT, self.request_exit)
+                loop.add_signal_handler(signal.SIGTERM, self.request_exit)
+            except NotImplementedError:
+                pass
+            # Keep the server running indefinitely
+            try:
+                await asyncio.Event().wait()
+            except GracefulExit:
+                # Gracefully handle exit signal
+                pass
         finally:
             # Cleanup
             await runner.cleanup()
