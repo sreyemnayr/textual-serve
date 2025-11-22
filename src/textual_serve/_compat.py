@@ -23,7 +23,7 @@ else:
             self.__doc__ = func.__doc__
             self.__module__ = func.__module__
 
-        def __set_name__(self, owner: type[any], name: str) -> None:
+        def __set_name__(self, owner: type[Any], name: str) -> None:
             if self.attrname is None:
                 self.attrname = name
             elif name != self.attrname:
